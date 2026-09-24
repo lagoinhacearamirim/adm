@@ -1,5 +1,5 @@
 // ATENÇÃO: Substitua pelo link gerado no seu Google Apps Script (Implantação de Aplicativo da Web)
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyztFHTnZVmc0oxYfCcGleLtI5855H4Ca9pLsOsTVLAENMMoS69RxqR07hEXrpEAp9x5Q/exec"; 
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzN0f7HdfsB2AiJ9i4cnoJR2jmPNZoBsKdfazs3pbeQvyx0Jzwl0mYsgV-dcLuAZzsWHg/exec"; 
 
 let allGCs = [];
 let addressCache = null;
@@ -92,8 +92,10 @@ function openViewModal(gc) {
     if(gc.lider2) lideres += ` e ${gc.lider2}`;
     document.getElementById('view-gc-lider').innerText = lideres;
 
-    // Remove caracteres especiais para o link do zap
-    const numeroLimpo = gc.telefone.replace(/\D/g, '');
+    // Converte o telefone para texto e remove caracteres especiais para o link do zap (Evita o erro de Type)
+    const telefoneString = String(gc.telefone || "");
+    const numeroLimpo = telefoneString.replace(/\D/g, '');
+    
     document.getElementById('btn-contatar-lider').href = `https://wa.me/55${numeroLimpo}`;
 
     openModal('modal-view-gc');
