@@ -167,7 +167,7 @@ body {
     background: rgba(0,0,0,0.6);
     display: none;
     justify-content: center;
-    align-items: flex-end; /* Abre de baixo pra cima em celulares */
+    align-items: center; /* Centralizado verticalmente */
     z-index: 2000;
 }
 
@@ -182,9 +182,9 @@ body {
 .modal-content {
     background-color: #d3d1d1;
     color: #000000;
-    width: 100%;
+    width: calc(100% - 40px); /* Garante margem nas laterais em telas menores */
     max-width: 500px;
-    border-radius: 20px 20px 0 0;
+    border-radius: 20px; /* Cantos arredondados por completo */
     padding: 30px 20px;
     position: relative;
     max-height: 90vh;
