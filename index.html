@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backstage - GC's Lagoinha</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- LOADER -->
+    <div id="loader-overlay" class="loader-overlay" style="display: none;">
+        <div class="loader-wrapper">
+            <img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExeGczM2ZyaXMyaXo3c3Z4M2I3Z3pxMGUyd21uanE3Ym5lb2NlenBpayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/vrHepZHufSd2UP8BGs/giphy.gif" alt="Lagoinha" class="loader-logo">
+            <img src="https://cdn.pixabay.com/animation/2023/05/02/04/29/04-29-06-428_512.gif" alt="Loading" class="loader-spinner">
+        </div>
+    </div>
+
+    <header class="header">
+        <h1>GC'S LAGOINHA CEARÁ-MIRIM</h1>
+    </header>
+
+    <main class="container">
+        <div class="search-bar">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <input type="text" id="search-input" placeholder="Digite o nome do GC ou bairro..." oninput="filterGCs()">
+        </div>
+
+        <!-- Lista de GCs -->
+        <div class="gc-list-container" id="gc-list-container">
+            <!-- GCs injetados via JS -->
+        </div>
+    </main>
+
+    <!-- Botão Adicionar (FAB) -->
+    <button class="fab-btn" onclick="openModal('modal-add-gc')">
+        <i class="fa-solid fa-plus"></i>
+    </button>
+
+    <!-- MODAL: Visualizar GC -->
+    <div id="modal-view-gc" class="modal-overlay" onclick="closeAllModals(event)">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal('modal-view-gc')"><i class="fa-solid fa-xmark"></i></button>
+            <h2 id="view-gc-name">Nome do GC</h2>
+            <div class="view-info">
+                <p><strong>Bairro:</strong> <span id="view-gc-bairro"></span></p>
+                <p><strong>Encontros:</strong> <span id="view-gc-diahora"></span></p>
+                <p><strong>Líder(es):</strong> <span id="view-gc-lider"></span></p>
+            </div>
+            <a href="#" id="btn-contatar-lider" target="_blank" class="btn-action">Contatar líder</a>
+        </div>
+    </div>
+
+    <!-- MODAL: Adicionar GC -->
+    <div id="modal-add-gc" class="modal-overlay" onclick="closeAllModals(event)">
+        <div class="modal-content form-modal">
+            <button class="close-btn" onclick="closeModal('modal-add-gc')"><i class="fa-solid fa-xmark"></i></button>
+            <h2>Adicionar meu GC</h2>
+            
+            <form id="add-gc-form" onsubmit="event.preventDefault(); submitGC();">
+                <h3 class="section-title">Info. do GC</h3>
+                <input type="text" id="gc-nome" placeholder="Nome do GC *" required>
+                <input type="text" id="gc-lider1" placeholder="Líder 1 *" required>
+                <input type="text" id="gc-lider2" placeholder="Líder 2 (Opcional)">
+                <input type="tel" id="gc-telefone" placeholder="Telefone para contato *" required>
+                <input type="text" id="gc-diahora" placeholder="Dia e Hora mais comum (Ex: Sexta 19:30) *" required>
+                
+                <button type="button" class="btn-address" onclick="openModal('modal-address')">
+                    <i class="fa-solid fa-map-location-dot"></i> <span id="address-btn-text">Endereço principal</span>
+                </button>
+
+                <h3 class="section-title">Membros do GC</h3>
+                <div id="membros-container">
+                    <!-- Três campos iniciais gerados via JS no script -->
+                </div>
+                
+                <button type="button" class="btn-add-member" onclick="addMemberRow()"><i class="fa-solid fa-plus"></i> Adicionar membro</button>
+                <button type="submit" class="btn-action btn-salvar">Salvar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL (Sobreposto): Endereço -->
+    <div id="modal-address" class="modal-overlay inner-overlay">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal('modal-address')"><i class="fa-solid fa-xmark"></i></button>
+            <h2>Endereço principal</h2>
+            <input type="text" id="end-cidade" placeholder="Cidade *" required>
+            <input type="text" id="end-bairro" placeholder="Bairro *" required>
+            <input type="text" id="end-rua" placeholder="Rua *" required>
+            <input type="text" id="end-numero" placeholder="Número *" required>
+            
+            <button type="button" class="btn-action" onclick="saveAddressCache()">Concluído</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
