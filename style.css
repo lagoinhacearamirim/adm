@@ -1,0 +1,281 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Open Sans', sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #000000 0%, #575656 100%);
+    min-height: 100vh;
+    color: #ffffff;
+}
+
+/* Loader Duplo */
+.loader-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.85);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.loader-wrapper {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.loader-logo {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    z-index: 2;
+}
+
+.loader-spinner {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    z-index: 1;
+}
+
+/* Header */
+.header {
+    text-align: center;
+    padding: 30px 20px 20px;
+}
+
+.header h1 {
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 1.3rem;
+    text-transform: uppercase;
+}
+
+/* Search Bar */
+.container {
+    padding: 0 20px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.search-bar {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.search-bar input {
+    width: 100%;
+    background-color: #d3d1d1;
+    border: none;
+    border-radius: 25px;
+    padding: 15px 15px 15px 45px;
+    font-size: 1rem;
+    color: #363636;
+    outline: none;
+}
+
+.search-bar input::placeholder {
+    color: #7a7a7a; /* Esmaecido */
+}
+
+.search-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #000000;
+    font-size: 1.2rem;
+}
+
+/* Container de GCs */
+.gc-list-container {
+    background-color: #d3d1d1;
+    border-radius: 15px;
+    overflow: hidden;
+    margin-bottom: 100px; /* Espaço pro FAB */
+}
+
+.gc-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #363636;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.gc-item:last-child {
+    border-bottom: none;
+}
+
+.gc-item:active {
+    background-color: #bebebe;
+}
+
+.gc-info h3 {
+    color: #000000;
+    font-weight: 700;
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+}
+
+.gc-info p {
+    color: #363636;
+    font-weight: 400;
+    font-size: 0.95rem;
+}
+
+.gc-arrow {
+    color: #363636;
+    font-size: 1.2rem;
+}
+
+/* FAB (Floating Action Button) */
+.fab-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #8e8e8e;
+    border: none;
+    color: #363636;
+    font-size: 1.8rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    cursor: pointer;
+    z-index: 1000;
+}
+
+/* Modais */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.6);
+    display: none;
+    justify-content: center;
+    align-items: flex-end; /* Abre de baixo pra cima em celulares */
+    z-index: 2000;
+}
+
+.inner-overlay {
+    z-index: 2100; /* Sobreposto ao modal de adição */
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.modal-content {
+    background-color: #d3d1d1;
+    color: #000000;
+    width: 100%;
+    max-width: 500px;
+    border-radius: 20px 20px 0 0;
+    padding: 30px 20px;
+    position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #000000;
+    cursor: pointer;
+}
+
+.modal-content h2 {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.section-title {
+    background-color: #575656;
+    color: #fff;
+    padding: 8px 15px;
+    border-radius: 10px;
+    margin: 20px 0 10px;
+    font-size: 1rem;
+}
+
+input {
+    width: 100%;
+    background-color: #ffffff;
+    border: 1px solid #8e8e8e;
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 10px;
+    font-size: 1rem;
+    outline: none;
+}
+
+/* Botões Customizados */
+.btn-address, .btn-action {
+    width: 100%;
+    padding: 15px;
+    border-radius: 10px;
+    border: none;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    text-align: center;
+    display: block;
+    text-decoration: none;
+}
+
+.btn-address {
+    background-color: #8e8e8e;
+    color: #ffffff;
+    margin-bottom: 10px;
+}
+
+.btn-action {
+    background-color: #000000;
+    color: #ffffff;
+    margin-top: 20px;
+}
+
+.btn-add-member {
+    background: none;
+    border: none;
+    color: #000000;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    display: block;
+    margin: 10px auto;
+}
+
+.member-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.member-row input {
+    margin-bottom: 0;
+}
+
+/* View GC Info */
+.view-info p {
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+}
