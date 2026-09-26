@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- LOADER -->
     <div id="loader-overlay" class="loader-overlay" style="display: none;">
         <div class="loader-wrapper">
             <img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExeGczM2ZyaXMyaXo3c3Z4M2I3Z3pxMGUyd21uanE3Ym5lb2NlenBpayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/vrHepZHufSd2UP8BGs/giphy.gif" alt="Lagoinha" class="loader-logo">
@@ -27,23 +26,20 @@
             <input type="text" id="search-input" placeholder="Digite o nome do GC ou bairro..." oninput="filterGCs()">
         </div>
 
-        <!-- Lista de GCs -->
         <div class="gc-list-container" id="gc-list-container">
-            <!-- GCs injetados via JS -->
-        </div>
+            </div>
     </main>
 
-    <!-- Botão Adicionar (FAB) -->
     <button class="fab-btn" onclick="openModal('modal-add-gc')">
         <i class="fa-solid fa-plus"></i>
     </button>
 
-    <!-- MODAL: Visualizar GC -->
     <div id="modal-view-gc" class="modal-overlay" onclick="closeAllModals(event)">
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal('modal-view-gc')"><i class="fa-solid fa-xmark"></i></button>
             <h2 id="view-gc-name">Nome do GC</h2>
             <div class="view-info">
+                <p><strong>Categoria:</strong> <span id="view-gc-categoria"></span></p>
                 <p><strong>Bairro:</strong> <span id="view-gc-bairro"></span></p>
                 <p><strong>Encontros:</strong> <span id="view-gc-diahora"></span></p>
                 <p><strong>Líder(es):</strong> <span id="view-gc-lider"></span></p>
@@ -52,7 +48,6 @@
         </div>
     </div>
 
-    <!-- MODAL: Adicionar GC -->
     <div id="modal-add-gc" class="modal-overlay" onclick="closeAllModals(event)">
         <div class="modal-content form-modal">
             <button class="close-btn" onclick="closeModal('modal-add-gc')"><i class="fa-solid fa-xmark"></i></button>
@@ -61,6 +56,20 @@
             <form id="add-gc-form" onsubmit="event.preventDefault(); submitGC();">
                 <h3 class="section-title">Info. do GC</h3>
                 <input type="text" id="gc-nome" placeholder="Nome do GC *" required>
+                
+                <select id="gc-categoria" required>
+                    <option value="" disabled selected>Selecione a Categoria *</option>
+                    <option value="Casais">Casais</option>
+                    <option value="Homens (até 24 anos)">Homens (até 24 anos)</option>
+                    <option value="Mulheres (até 24 anos)">Mulheres (até 24 anos)</option>
+                    <option value="Meninos (até 17 anos)">Meninos (até 17 anos)</option>
+                    <option value="Meninas (até 17 anos)">Meninas (até 17 anos)</option>
+                    <option value="Pré-adolescentes (até 12 anos)">Pré-adolescentes (até 12 anos)</option>
+                    <option value="Crianças (até 9 anos)">Crianças (até 9 anos)</option>
+                    <option value="Homens (25 anos ou mais)">Homens (25 anos ou mais)</option>
+                    <option value="Mulheres (25 anos ou mais)">Mulheres (25 anos ou mais)</option>
+                </select>
+
                 <input type="text" id="gc-lider1" placeholder="Líder 1 *" required>
                 <input type="text" id="gc-lider2" placeholder="Líder 2 (Opcional)">
                 <input type="tel" id="gc-telefone" placeholder="Telefone para contato *" required>
@@ -72,8 +81,7 @@
 
                 <h3 class="section-title">Membros do GC</h3>
                 <div id="membros-container">
-                    <!-- Três campos iniciais gerados via JS no script -->
-                </div>
+                    </div>
                 
                 <button type="button" class="btn-add-member" onclick="addMemberRow()"><i class="fa-solid fa-plus"></i> Adicionar membro</button>
                 <button type="submit" class="btn-action btn-salvar">Salvar</button>
@@ -81,7 +89,6 @@
         </div>
     </div>
 
-    <!-- MODAL (Sobreposto): Endereço -->
     <div id="modal-address" class="modal-overlay inner-overlay">
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal('modal-address')"><i class="fa-solid fa-xmark"></i></button>
