@@ -1,5 +1,5 @@
 // ATENÇÃO: Substitua pelo link gerado no seu Google Apps Script (Implantação de Aplicativo da Web)
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzN0f7HdfsB2AiJ9i4cnoJR2jmPNZoBsKdfazs3pbeQvyx0Jzwl0mYsgV-dcLuAZzsWHg/exec"; 
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzWFWZ9xvTyhO8F8QNQWvpMFx5_aLXZB3tiSL3d96EGysdK_gazBUIro4x454Eav8mitg/exec"; 
 
 let allGCs = [];
 let addressCache = null;
