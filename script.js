@@ -85,6 +85,7 @@ function closeAllModals(event) {
 // Modal Visualizar GC
 function openViewModal(gc) {
     document.getElementById('view-gc-name').innerText = gc.nomeGC;
+    document.getElementById('view-gc-categoria').innerText = gc.categoria || "Não informada";
     document.getElementById('view-gc-bairro').innerText = gc.bairro;
     document.getElementById('view-gc-diahora').innerText = gc.diaHora;
     
@@ -164,6 +165,7 @@ async function submitGC() {
             lider2: document.getElementById('gc-lider2').value,
             telefone: document.getElementById('gc-telefone').value,
             diaHora: document.getElementById('gc-diahora').value,
+            categoria: document.getElementById('gc-categoria').value,
             endereco: addressCache,
             membros: membros
         }
