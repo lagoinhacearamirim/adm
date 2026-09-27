@@ -4,6 +4,9 @@ const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzWFWZ9xvTyhO8F8QNQ
 let allGCs = [];
 let addressCache = null;
 
+let currentViewedGC = null;
+let isEditing = false;
+
 // Ao carregar a página
 document.addEventListener("DOMContentLoaded", () => {
     initMembrosForm();
@@ -84,6 +87,8 @@ function closeAllModals(event) {
 
 // Modal Visualizar GC
 function openViewModal(gc) {
+    currentViewedGC = gc;
+
     document.getElementById('view-gc-name').innerText = gc.nomeGC;
     document.getElementById('view-gc-categoria').innerText = gc.categoria || "Não informada";
     document.getElementById('view-gc-bairro').innerText = gc.bairro;
@@ -100,6 +105,77 @@ function openViewModal(gc) {
     document.getElementById('btn-contatar-lider').href = `https://wa.me/55${numeroLimpo}`;
 
     openModal('modal-view-gc');
+}
+
+// Abrir modal de adição limpo (Novo GC)
+function openAddModal() {
+    isEditing = false;
+    document.getElementById('add-gc-form').reset();
+    addressCache = null;
+    document.getElementById('address-btn-text').innerText = "Endereço principal";
+    
+    document.getElementById('end-cidade').value = '';
+    document.getElementById('end-bairro').value = '';
+    document.getElementById('end-rua').value = '';
+    document.getElementById('end-numero').value = '';
+
+    initMembrosForm();
+    document.getElementById('modal-add-title').innerText = 'Adicionar meu GC';
+    openModal('modal-add-gc');
+}
+
+// Abrir modal de edição preenchido
+function openEditModal() {
+    if (!currentViewedGC) return;
+    
+    isEditing = true;
+    const gc = currentViewedGC;
+    
+    document.getElementById('modal-add-title').innerText = 'Editar GC';
+
+    document.getElementById('gc-nome').value = gc.nomeGC || '';
+    document.getElementById('gc-categoria').value = gc.categoria || '';
+    document.getElementById('gc-lider1').value = gc.lider1 || '';
+    document.getElementById('gc-lider2').value = gc.lider2 || '';
+    document.getElementById('gc-telefone').value = gc.telefone || '';
+    document.getElementById('gc-diahora').value = gc.diaHora || '';
+
+    // Recupera o endereço
+    if (gc.endereco) {
+        addressCache = gc.endereco;
+    } else {
+        addressCache = { cidade: gc.cidade || '', bairro: gc.bairro || '', rua: gc.rua || '', numero: gc.numero || '' };
+    }
+
+    document.getElementById('end-cidade').value = addressCache.cidade || '';
+    document.getElementById('end-bairro').value = addressCache.bairro || '';
+    document.getElementById('end-rua').value = addressCache.rua || '';
+    document.getElementById('end-numero').value = addressCache.numero || '';
+
+    const textoRua = addressCache.rua ? `${addressCache.rua}, ${addressCache.numero} - ${addressCache.bairro}` : "Endereço principal";
+    document.getElementById('address-btn-text').innerText = textoRua;
+
+    // Recupera os membros
+    const container = document.getElementById('membros-container');
+    container.innerHTML = '';
+    let membros = gc.membros || [];
+    
+    if (typeof membros === 'string') {
+        try { membros = JSON.parse(membros); } catch (e) { membros = []; }
+    }
+    
+    if (membros.length === 0) {
+        initMembrosForm();
+    } else {
+        membros.forEach(m => addMemberRow(m.nome, m.telefone));
+        // Garante que o visual tenha pelo menos 3 linhas se vierem menos que 3 membros
+        while (container.children.length < 3) {
+            addMemberRow();
+        }
+    }
+
+    closeModal('modal-view-gc');
+    openModal('modal-add-gc');
 }
 
 // === FORMULÁRIO ENDEREÇO ===
@@ -127,13 +203,13 @@ function initMembrosForm() {
     for(let i = 0; i < 3; i++) addMemberRow();
 }
 
-function addMemberRow() {
+function addMemberRow(nome = '', telefone = '') {
     const container = document.getElementById('membros-container');
     const div = document.createElement('div');
     div.className = 'member-row';
     div.innerHTML = `
-        <input type="text" class="membro-nome" placeholder="Nome">
-        <input type="tel" class="membro-telefone" placeholder="Telefone">
+        <input type="text" class="membro-nome" placeholder="Nome" value="${nome}">
+        <input type="tel" class="membro-telefone" placeholder="Telefone" value="${telefone}">
     `;
     container.appendChild(div);
 }
@@ -158,7 +234,8 @@ async function submitGC() {
     });
 
     const payload = {
-        action: 'saveGC',
+        action: isEditing ? 'editGC' : 'saveGC',
+        idOriginal: isEditing ? currentViewedGC.nomeGC : undefined, // Ref para o Google Script saber qual GC editar
         payload: {
             nomeGC: document.getElementById('gc-nome').value,
             lider1: document.getElementById('gc-lider1').value,
@@ -180,10 +257,14 @@ async function submitGC() {
         
         const result = await response.json();
         if(result.success) {
-            alert("GC salvo com sucesso!");
+            alert(isEditing ? "GC editado com sucesso!" : "GC salvo com sucesso!");
+            
             document.getElementById('add-gc-form').reset();
             addressCache = null;
+            isEditing = false;
+            document.getElementById('modal-add-title').innerText = 'Adicionar meu GC';
             document.getElementById('address-btn-text').innerText = "Endereço principal";
+            
             initMembrosForm();
             closeModal('modal-add-gc');
             loadGCs(); // Atualiza a lista da página
