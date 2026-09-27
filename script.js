@@ -98,7 +98,7 @@ function openViewModal(gc) {
     if(gc.lider2) lideres += ` e ${gc.lider2}`;
     document.getElementById('view-gc-lider').innerText = lideres;
 
-    // Converte o telefone para texto e remove caracteres especiais para o link do zap (Evita o erro de Type)
+    // Converte o telefone para texto e remove caracteres especiais para o link do zap
     const telefoneString = String(gc.telefone || "");
     const numeroLimpo = telefoneString.replace(/\D/g, '');
     
@@ -107,11 +107,15 @@ function openViewModal(gc) {
     openModal('modal-view-gc');
 }
 
-// Abrir modal de adição limpo (Novo GC)
+// Abrir Modal de Adição (Limpo)
 function openAddModal() {
     isEditing = false;
+    currentViewedGC = null;
+    
     document.getElementById('add-gc-form').reset();
     addressCache = null;
+    
+    document.getElementById('modal-add-title').innerText = "Adicionar meu GC";
     document.getElementById('address-btn-text').innerText = "Endereço principal";
     
     document.getElementById('end-cidade').value = '';
@@ -120,12 +124,11 @@ function openAddModal() {
     document.getElementById('end-numero').value = '';
 
     initMembrosForm();
-    document.getElementById('modal-add-title').innerText = 'Adicionar meu GC';
     openModal('modal-add-gc');
 }
 
-// Abrir modal de edição preenchido
-function openEditModal() {
+// Abrir Modal de Edição (Preenchido e buscando membros)
+async function openEditModal() {
     if (!currentViewedGC) return;
     
     isEditing = true;
@@ -140,7 +143,7 @@ function openEditModal() {
     document.getElementById('gc-telefone').value = gc.telefone || '';
     document.getElementById('gc-diahora').value = gc.diaHora || '';
 
-    // Recupera o endereço
+    // Recupera endereço
     if (gc.endereco) {
         addressCache = gc.endereco;
     } else {
@@ -155,20 +158,35 @@ function openEditModal() {
     const textoRua = addressCache.rua ? `${addressCache.rua}, ${addressCache.numero} - ${addressCache.bairro}` : "Endereço principal";
     document.getElementById('address-btn-text').innerText = textoRua;
 
-    // Recupera os membros
     const container = document.getElementById('membros-container');
     container.innerHTML = '';
-    let membros = gc.membros || [];
-    
+    let membros = gc.membros;
+
+    // Se o array de membros não estiver no objeto original, busca na lista pelo código
+    if (!membros) {
+        showLoader();
+        try {
+            const res = await fetch(`${WEB_APP_URL}?action=getMembros&codigo=${gc.codigo}`);
+            const data = await res.json();
+            membros = data.membros || [];
+        } catch (error) {
+            console.error("Erro ao buscar membros na lista:", error);
+            membros = [];
+        } finally {
+            hideLoader();
+        }
+    }
+
+    // Caso os membros venham em formato de string do backend
     if (typeof membros === 'string') {
         try { membros = JSON.parse(membros); } catch (e) { membros = []; }
     }
     
-    if (membros.length === 0) {
+    if (!membros || membros.length === 0) {
         initMembrosForm();
     } else {
         membros.forEach(m => addMemberRow(m.nome, m.telefone));
-        // Garante que o visual tenha pelo menos 3 linhas se vierem menos que 3 membros
+        // Mantém visual com pelo menos 3 linhas vazias se tiver poucos membros
         while (container.children.length < 3) {
             addMemberRow();
         }
@@ -235,7 +253,7 @@ async function submitGC() {
 
     const payload = {
         action: isEditing ? 'editGC' : 'saveGC',
-        idOriginal: isEditing ? currentViewedGC.nomeGC : undefined, // Ref para o Google Script saber qual GC editar
+        codigo: isEditing ? currentViewedGC.codigo : undefined, // Envia o código para a aba 'membros' do Google Script
         payload: {
             nomeGC: document.getElementById('gc-nome').value,
             lider1: document.getElementById('gc-lider1').value,
