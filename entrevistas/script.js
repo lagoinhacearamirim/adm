@@ -1,5 +1,5 @@
 // ATENÇÃO: Substitua pelo link gerado no seu Google Apps Script (Nova Implantação)
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxaeDHiMfDZNTuGiSHhOzDwL0SJMDoClTqubBJZOYqkNopx9Nrob7nELFAiqbP0jmbAsw/exec"; 
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyn02Bny1u3Y3ixfdnreAQVNw313AFMntfDhJfUtiPy2UChbqtuak7QkTDjA-tbZjwRUg/exec"; 
 
 let allEntrevistas = [];
 let currentEntrevista = null;
@@ -169,16 +169,11 @@ function openEditModal(codigo) {
         document.getElementById('ent-data').value = '';
     }
 
-    // Tratamento de hora (Pega apenas o HH:mm)
-    if (ent.hora) {
-        // Se vier como Date do Sheets
-        if(ent.hora.includes('T')) {
-            document.getElementById('ent-hora').value = new Date(ent.hora).toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
-        } else {
-            document.getElementById('ent-hora').value = ent.hora; 
-        }
+    // Tratamento de telefone
+    if (ent.telefone) {
+        document.getElementById('ent-telefone').value = ent.telefone;
     } else {
-        document.getElementById('ent-hora').value = '';
+        document.getElementById('ent-telefone').value = '';
     }
 
     selectStatus(ent.status || '');
@@ -197,7 +192,7 @@ async function submitEntrevista() {
         payload: {
             nome: document.getElementById('ent-nome').value.trim(),
             data: document.getElementById('ent-data').value,
-            hora: document.getElementById('ent-hora').value,
+            telefone: document.getElementById('ent-telefone').value,
             status: selectedStatus
         }
     };
