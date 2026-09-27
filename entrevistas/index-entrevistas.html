@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entrevistas - Membresia LGNHA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="loader-overlay" class="loader-overlay" style="display: none;">
+        <div class="loader-wrapper">
+            <img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExeGczM2ZyaXMyaXo3c3Z4M2I3Z3pxMGUyd21uanE3Ym5lb2NlenBpayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/vrHepZHufSd2UP8BGs/giphy.gif" alt="Lagoinha" class="loader-logo">
+            <img src="https://cdn.pixabay.com/animation/2023/05/02/04/29/04-29-06-428_512.gif" alt="Loading" class="loader-spinner">
+        </div>
+    </div>
+
+    <header class="header">
+        <h1>Entrevistas para membresia LGNHA</h1>
+    </header>
+
+    <main class="container">
+        <div class="search-wrapper">
+            <div class="search-bar">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" id="search-input" placeholder="Digite o nome do membro..." oninput="filterEntrevistas()">
+            </div>
+            <button class="filter-btn" onclick="openModal('modal-filtro')">
+                <i class="fa-solid fa-filter"></i>
+            </button>
+        </div>
+
+        <div class="gc-list-container" id="entrevistas-list-container">
+            <!-- Entrevistas injetadas via JS -->
+        </div>
+    </main>
+
+    <button class="fab-btn" onclick="openAddModal()">
+        <i class="fa-solid fa-plus"></i>
+    </button>
+
+    <!-- MODAL: Adicionar / Editar Entrevista (Conforme PDF) -->
+    <div id="modal-add-entrevista" class="modal-overlay" onclick="closeAllModals(event)">
+        <div class="modal-content form-modal">
+            <button class="close-btn" onclick="closeModal('modal-add-entrevista')"><i class="fa-solid fa-xmark"></i></button>
+            <h2 id="modal-add-title">Adicionar entrevista</h2>
+            
+            <form id="add-entrevista-form" onsubmit="event.preventDefault(); submitEntrevista();">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Nome *</label>
+                        <input type="text" id="ent-nome" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Data da entrevista</label>
+                        <input type="date" id="ent-data">
+                    </div>
+                    <div class="form-group">
+                        <label>Hora da entrevista</label>
+                        <input type="time" id="ent-hora">
+                    </div>
+                    <div class="form-group">
+                        <label>Entrevista realizada? *</label>
+                        <div class="status-buttons">
+                            <button type="button" class="status-btn check" id="btn-status-check" onclick="selectStatus('Entrevista Concluída')">
+                                <i class="fa-solid fa-check"></i>
+                            </button>
+                            <button type="button" class="status-btn cross" id="btn-status-cross" onclick="selectStatus('Entrevista pendente')">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn-action btn-salvar" style="background-color: #a09d9d; color: #000;">Concluído</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: Filtro -->
+    <div id="modal-filtro" class="modal-overlay inner-overlay">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal('modal-filtro')"><i class="fa-solid fa-xmark"></i></button>
+            <h2>Filtrar Entrevistas</h2>
+            
+            <div class="form-group" style="margin-bottom: 15px;">
+                <label>Status da Entrevista</label>
+                <select id="filtro-status" onchange="filterEntrevistas()">
+                    <option value="">Todas</option>
+                    <option value="Entrevista Concluída">Concluídas</option>
+                    <option value="Entrevista pendente">Pendentes</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Data Específica</label>
+                <input type="date" id="filtro-data" onchange="filterEntrevistas()">
+            </div>
+            
+            <button type="button" class="btn-action" onclick="closeModal('modal-filtro')">Aplicar Filtros</button>
+            <button type="button" class="btn-add-member" onclick="limparFiltros()">Limpar Filtros</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
