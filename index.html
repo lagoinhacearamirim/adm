@@ -30,7 +30,7 @@
             </div>
     </main>
 
-    <button class="fab-btn" onclick="openModal('modal-add-gc')">
+    <button class="fab-btn" onclick="openAddModal()">
         <i class="fa-solid fa-plus"></i>
     </button>
 
@@ -45,13 +45,14 @@
                 <p><strong>Líder(es):</strong> <span id="view-gc-lider"></span></p>
             </div>
             <a href="#" id="btn-contatar-lider" target="_blank" class="btn-action">Contatar líder</a>
+            <button class="btn-action btn-editar" onclick="openEditModal()">Editar GC</button>
         </div>
     </div>
 
     <div id="modal-add-gc" class="modal-overlay" onclick="closeAllModals(event)">
         <div class="modal-content form-modal">
             <button class="close-btn" onclick="closeModal('modal-add-gc')"><i class="fa-solid fa-xmark"></i></button>
-            <h2>Adicionar meu GC</h2>
+            <h2 id="modal-add-title">Adicionar meu GC</h2>
             
             <form id="add-gc-form" onsubmit="event.preventDefault(); submitGC();">
                 <h3 class="section-title">Info. do GC</h3>
