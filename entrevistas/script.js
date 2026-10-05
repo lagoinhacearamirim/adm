@@ -1,5 +1,5 @@
 // ATENÇÃO: Substitua pelo link gerado no seu Google Apps Script (Nova Implantação)
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyn02Bny1u3Y3ixfdnreAQVNw313AFMntfDhJfUtiPy2UChbqtuak7QkTDjA-tbZjwRUg/exec"; 
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycby3eynRSmSiPQXTnQqXkWeZsmtzBERusOAdKlRfQB_D84Eh06QC4iPYP3kjkwm8E-4l1Q/exec"; 
 
 let allEntrevistas = [];
 let currentEntrevista = null;
