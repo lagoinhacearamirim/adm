@@ -1,10 +1,10 @@
-// ATENÇÃO: Substitua pelo link gerado no seu Google Apps Script (Nova Implantação)
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycby3eynRSmSiPQXTnQqXkWeZsmtzBERusOAdKlRfQB_D84Eh06QC4iPYP3kjkwm8E-4l1Q/exec"; 
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycby01w0_IVlAegV1Z8ZyIL6zLWL0LeRTZy3oR8wtHmFaqXtz5FP8hUE_3p6y-us9Y6yfuQ/exec"; 
 
 let allEntrevistas = [];
 let currentEntrevista = null;
 let isEditing = false;
 let selectedStatus = ''; // Armazena o status clicado no modal ('Entrevista Concluída' ou 'Entrevista pendente')
+let currentTab = 'todas'; // Aba atual selecionada ('todas', 'batizados', 'nao-batizados')
 
 document.addEventListener("DOMContentLoaded", () => {
     loadEntrevistas();
@@ -12,6 +12,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function showLoader() { document.getElementById('loader-overlay').style.display = 'flex'; }
 function hideLoader() { document.getElementById('loader-overlay').style.display = 'none'; }
+
+// === GERENCIAMENTO DE ABAS ===
+function switchTab(tab, btnElement) {
+    currentTab = tab;
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    if (btnElement) {
+        btnElement.classList.add('active');
+    }
+    filterEntrevistas();
+}
 
 // === CARREGAR E RENDERIZAR ===
 async function loadEntrevistas() {
@@ -76,6 +86,17 @@ function filterEntrevistas() {
         const matchTermo = (ent.nome || '').toLowerCase().includes(termo);
         const matchStatus = filtroStatus === '' || ent.status === filtroStatus;
         
+        // Filtro por Abas (Batizado)
+        let matchAba = true;
+        const batizadoVal = (ent.batizado || '').trim().toLowerCase();
+        if (currentTab === 'batizados') {
+            matchAba = (batizadoVal === 'sim');
+        } else if (currentTab === 'nao-batizados') {
+            matchAba = (batizadoVal === 'não' || batizadoVal === 'nao');
+        } else if (currentTab === 'todas') {
+            matchAba = true;
+        }
+
         let matchData = true;
         if (filtroData) {
             // Converte a data do sheets para YYYY-MM-DD para comparar com o input type="date"
@@ -83,7 +104,7 @@ function filterEntrevistas() {
             matchData = dataSheetFormatada === filtroData;
         }
 
-        return matchTermo && matchStatus && matchData;
+        return matchTermo && matchStatus && matchAba && matchData;
     });
     renderEntrevistasList(filtrados);
 }
@@ -149,6 +170,7 @@ function openAddModal() {
     document.getElementById('add-entrevista-form').reset();
     document.getElementById('modal-add-title').innerText = "Adicionar entrevista";
     selectStatus(''); // Limpa o status selecionado
+    document.getElementById('ent-batizado').value = '';
     openModal('modal-add-entrevista');
 }
 
@@ -176,6 +198,9 @@ function openEditModal(codigo) {
         document.getElementById('ent-telefone').value = '';
     }
 
+    // Tratamento de batizado
+    document.getElementById('ent-batizado').value = ent.batizado ? ent.batizado.toLowerCase() : '';
+
     selectStatus(ent.status || '');
     openModal('modal-add-entrevista');
 }
@@ -186,6 +211,12 @@ async function submitEntrevista() {
         return;
     }
 
+    const batizadoVal = document.getElementById('ent-batizado').value;
+    if (!batizadoVal) {
+        alert("Por favor, selecione se a pessoa é batizada (Sim ou Não).");
+        return;
+    }
+
     const payload = {
         action: isEditing ? 'editEntrevista' : 'saveEntrevista',
         codigo: isEditing ? currentEntrevista.codigo : undefined,
@@ -193,7 +224,8 @@ async function submitEntrevista() {
             nome: document.getElementById('ent-nome').value.trim(),
             data: document.getElementById('ent-data').value,
             telefone: document.getElementById('ent-telefone').value,
-            status: selectedStatus
+            status: selectedStatus,
+            batizado: batizadoVal
         }
     };
 
